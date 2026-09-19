@@ -1,32 +1,68 @@
-# ForgeUI Hardware Lab — ST7789 240×240 Square Display
+# ForgeUI MicroAsteroids — ESP32-S3 + ST7789 240×240
 
-A physically tested ESP32-S3 reference for a 1.54-inch square SPI TFT using the ST7789 controller at its native 240×240 resolution. It is a minimal, known-good display bring-up baseline from the ForgeUI Hardware Lab.
+A physically tested joystick-controlled arcade game and graphical showcase for an ESP32-S3 DevKitC-1, a 1.54-inch ST7789 square SPI TFT at its native 240×240 resolution, and an analogue joystick. It is built on the proven ForgeUI ST7789 240×240 square-display baseline.
 
-![Physical ST7789 240×240 display pass](splash-st7789-240x240-square.png)
+![Physical MicroAsteroids gameplay on the tested hardware](Splash3.png)
 
-## PHYSICAL DISPLAY PASS
+## PHYSICAL GAME PASS
 
-Physically tested on **19 September 2026**.
+MicroAsteroids has been physically run on the real ESP32-S3 + ST7789 240×240 hardware.
 
-- Display power and backlight passed.
-- ST7789 initialization passed.
-- Full-screen **RED**, **GREEN**, **BLUE**, **CYAN**, and **YELLOW** fills passed.
-- The complete 240×240 viewport rendered correctly, with no observed cropping or offset.
-- The ForgeUI physical-pass screen rendered correctly.
-- PlatformIO build: **PASS**.
-- Firmware flash: **PASS**.
+- Display initialization and full 240×240 rendering: PASS
+- Joystick control, title launch, HUD, ship, asteroids, and active gameplay: PASS
+- PlatformIO build and firmware flash: PASS
 
-## Hardware identification
+## Gameplay overview
+
+Pilot the ship through successive asteroid waves. Rotate, thrust, brake, and fire with the joystick while the HUD tracks score, wave, and remaining lives. The game uses vector-style graphics, a starfield, particles, and nearby-threat indicators.
+
+## Controls
+
+| Joystick input | Action |
+| --- | --- |
+| Left / right | Rotate ship |
+| Forward / up | Thrust |
+| Backward / down | Brake / reverse thrust |
+| Push switch | Fire |
+
+Press the joystick switch on the title screen to launch, or after `MISSION LOST` to relaunch.
+
+## Physical joystick mapping
+
+| Joystick | ESP32-S3 |
+| --- | --- |
+| SW | GPIO4 |
+| VRy | GPIO5 |
+| VRx | GPIO6 |
+| +5V-labelled supply | 3.3V |
+| GND | GND |
+
+GPIO7 remains spare. The firmware calibrates the joystick centre from 64 samples on startup and applies a 180-unit dead zone.
+
+## Verified MicroAsteroids features
+
+- ForgeUI MicroAsteroids title screen and joystick launch/relaunch
+- 360-degree rotation, forward thrust, reverse/braking thrust, momentum, and speed limiting
+- Screen wrapping and held-button firing with up to eight bullets
+- Vector ship and vector asteroids in three sizes
+- Asteroid movement, rotation, bullet collisions, splitting, and inherited fragment motion
+- Particle effects and ship explosion
+- Three lives, score, session high score, waves, and increasing asteroid count/speed
+- Starfield, HUD, radar/threat ring, and close-threat indicators
+- `SHIP LOST` and `MISSION LOST` states
+- Approximately 30 FPS target loop and full-resolution `Arduino_Canvas` off-screen rendering
+
+## Hardware
 
 - Board: ESP32-S3 DevKitC-1
-- Display: 1.54-inch square TFT, ST7789 controller
-- Interface: SPI
+- Display: 1.54-inch square ST7789 SPI TFT
 - Native resolution: 240×240
 - PCB marking: `1.54TFT-SPI-ST7789 Ver:1.1`
+- Input: analogue joystick with push switch
 
-## Physically proven wiring
+## Display wiring
 
-| Display | ESP32-S3 |
+| ST7789 | ESP32-S3 |
 | --- | --- |
 | GND | GND |
 | VCC | 3.3V |
@@ -37,15 +73,13 @@ Physically tested on **19 September 2026**.
 | CS | GPIO8 |
 | BLK | 3.3V |
 
-MISO is not used.
+MISO is unused.
 
-### Backlight note
-
-For **this** tested 240×240 module, **BLK → 3.3V is physically proven**. Do not inherit the `BL → GND` wiring used by the separate 76×284 display reference.
+For this tested 1.54-inch square module, **BLK → 3.3V is physically proven**. Do not automatically generalize this connection to other ST7789 boards.
 
 ## Proven display configuration
 
-The supplied firmware uses Arduino_GFX with ESP32 HSPI, CS on GPIO8, and an ST7789 configured for a 240×240 viewport. The source is intentionally a small physical bring-up: it runs the colour-fill sequence and then holds the ForgeUI physical-pass screen.
+The firmware uses Arduino_GFX with ESP32 HSPI, CS on GPIO8, and an ST7789 configured for a 240×240 viewport. Rendering is performed through a full-resolution `Arduino_Canvas` before being flushed to the display.
 
 ## Software and build baseline
 
@@ -53,12 +87,11 @@ The supplied firmware uses Arduino_GFX with ESP32 HSPI, CS on GPIO8, and an ST77
 - `espressif32@6.7.0`
 - `esp32-s3-devkitc-1`
 - Arduino framework
-- Arduino-ESP32 2.0.16, as resolved by the pinned platform
-- Arduino_GFX 1.3.7
+- Arduino_GFX `1.3.7`
 
-Arduino_GFX is intentionally pinned at 1.3.7: a newer unpinned version produced an `esp32-hal-periman.h` compatibility failure in this environment.
+Arduino_GFX is deliberately pinned at 1.3.7 because a newer unpinned version produced an `esp32-hal-periman.h` compatibility failure in this environment. Builds can emit `SPI_MAX_PIXELS_AT_ONCE` redefinition warnings from within the pinned Arduino_GFX dependency; the physically tested build succeeds.
 
-## Build and upload
+## Build and flash
 
 Use PlatformIO with the pinned project configuration:
 
@@ -68,18 +101,33 @@ pio run --target upload
 pio device monitor
 ```
 
+## Physical validation record
+
+The current photos are retained as physical evidence while improved final photos are prepared.
+
+| Image | Evidence |
+| --- | --- |
+| [Splash1.png](Splash1.png) | MicroAsteroids title screen |
+| [Splash2.png](Splash2.png) | Active gameplay |
+| [Splash3.png](Splash3.png) | Gameplay action (current README hero) |
+| [splash-st7789-240x240-square.png](splash-st7789-240x240-square.png) | Underlying display bring-up pass |
+
+## Related square-display reference
+
+[forgeui-hw-st7789-240x240-square](https://github.com/RTechAI/forgeui-hw-st7789-240x240-square) is the golden ForgeUI hardware reference for this physically proven square-display configuration. MicroAsteroids is an application and showcase built from that baseline.
+
 ## ForgeUI Hardware Lab
 
-This is a physically tested [ForgeUI](https://forgeui.co.nz) Hardware Lab baseline. It is deliberately focused on reliable display bring-up and may support future square-display experiments and [ForgeUI Studio](https://studio.forgeui.co.nz) examples.
+This project is part of the [ForgeUI](https://forgeui.co.nz) Hardware Lab. [ForgeUI Studio](https://studio.forgeui.co.nz) provides the broader ForgeUI interface-design context.
 
-## External reference and dependency attribution
+## External dependency and reference attribution
 
-The initial investigation used the external reference project [kursatEcinni/esp32s3-st7789-test](https://github.com/kursatEcinni/esp32s3-st7789-test), which helped establish useful initial ESP32-S3/ST7789 information. It remains an independent project; ForgeUI does not own it. This repository contains its own minimal physical bring-up and does not copy that project's branding or unrelated LVGL material.
+[Arduino_GFX](https://github.com/moononournation/Arduino_GFX) is an external dependency and retains its own copyright and license.
 
-[Arduino_GFX](https://github.com/moononournation/Arduino_GFX) is the external display-library dependency. It remains the property of its respective authors and is subject to its own license.
+The independent [kursatEcinni/esp32s3-st7789-test](https://github.com/kursatEcinni/esp32s3-st7789-test) project was used as reference material during early square-display investigation. ForgeUI does not own that project; this repository does not copy its branding or LVGL demo material.
 
-## Scope and license
+## License and repository scope
 
-This repository documents one physically tested ESP32-S3 and ST7789 240×240 module combination. Other modules, controllers, revisions, and wiring arrangements should be validated independently.
+This repository documents a physically tested MicroAsteroids implementation for the stated ESP32-S3 board, display module, wiring, and joystick mapping. Validate other modules, board revisions, and wiring arrangements independently.
 
-Released under the [MIT License](LICENSE).
+ForgeUI-authored content is released under the [MIT License](LICENSE). Third-party software remains subject to its respective license.
