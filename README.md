@@ -1,8 +1,10 @@
 # ForgeUI MicroAsteroids — ESP32-S3 + ST7789 240×240
 
-A physically tested joystick-controlled arcade game and graphical showcase for an ESP32-S3 DevKitC-1, a 1.54-inch ST7789 square SPI TFT at its native 240×240 resolution, and an analogue joystick. It is built on the proven ForgeUI ST7789 240×240 square-display baseline.
+ForgeUI MicroAsteroids is an official ForgeUI Hardware Lab project developed by RTechAI: a physically tested joystick-controlled arcade game and graphics showcase for an ESP32-S3 DevKitC-1, a 1.54-inch ST7789 square SPI TFT at its native 240×240 resolution, and an analogue joystick.
 
-![Physical MicroAsteroids gameplay on the tested hardware](Splash3.png)
+It builds on the physically proven ForgeUI 240×240 square-display baseline and records a known-good hardware configuration alongside the application.
+
+![Physical MicroAsteroids gameplay on the tested ESP32-S3 and ST7789 hardware](splash3-st7789-240x240.png)
 
 ## PHYSICAL GAME PASS
 
@@ -103,22 +105,25 @@ pio device monitor
 
 ## Physical validation record
 
-The current photos are retained as physical evidence while improved final photos are prepared.
+The curated physical photos document three distinct observed states on the tested hardware.
 
 | Image | Evidence |
 | --- | --- |
-| [Splash1.png](Splash1.png) | MicroAsteroids title screen |
-| [Splash2.png](Splash2.png) | Active gameplay |
-| [Splash3.png](Splash3.png) | Gameplay action (current README hero) |
-| [splash-st7789-240x240-square.png](splash-st7789-240x240-square.png) | Underlying display bring-up pass |
+| [Title / launch state](splash1-st7789-240x240.png) | Physical title screen with the launch prompt visible |
+| [Active gameplay](splash3-st7789-240x240.png) | Physical gameplay screen with the ship, asteroids, HUD, and fired shots visible |
+| [MISSION LOST / relaunch state](splash5-st7789-240x240.png) | Physical game-over screen with the relaunch prompt visible |
 
-## Related square-display reference
+## Related ForgeUI Projects
 
-[forgeui-hw-st7789-240x240-square](https://github.com/RTechAI/forgeui-hw-st7789-240x240-square) is the golden ForgeUI hardware reference for this physically proven square-display configuration. MicroAsteroids is an application and showcase built from that baseline.
+- [Golden ST7789 240×240 Square Display](https://github.com/RTechAI/forgeui-hw-st7789-240x240-square) — the known-good ESP32-S3/ST7789 physical hardware baseline for this display family.
+- [ForgeUI MicroPilot](https://github.com/RTechAI/forgeui-hw-st7789-240x240-square-micropilot) — a joystick-controlled PFD/glass-cockpit graphics showcase for the same hardware family.
+- [ForgeUI MicroScope](https://github.com/RTechAI/forgeui-hw-st7789-240x240-square-microscope) — a simulated instrumentation and graphics showcase for the same hardware family.
 
 ## ForgeUI Hardware Lab
 
-This project is part of the [ForgeUI](https://forgeui.co.nz) Hardware Lab. [ForgeUI Studio](https://studio.forgeui.co.nz) provides the broader ForgeUI interface-design context.
+ForgeUI Hardware Lab is an RTechAI/ForgeUI collection of physically tested ESP32 boards, displays, peripherals, examples, and experimental projects. It establishes reproducible hardware baselines through hardware identification, minimal bring-up, physical proof, and preservation of known-good configurations. Demonstrations and candidate targets can then be evaluated for future ForgeUI Studio workflows.
+
+This Hardware Lab project does not by itself indicate that this ESP32-S3/ST7789 target is currently integrated into ForgeUI Studio.
 
 ## External dependency and reference attribution
 
@@ -131,3 +136,9 @@ The independent [kursatEcinni/esp32s3-st7789-test](https://github.com/kursatEcin
 This repository documents a physically tested MicroAsteroids implementation for the stated ESP32-S3 board, display module, wiring, and joystick mapping. Validate other modules, board revisions, and wiring arrangements independently.
 
 ForgeUI-authored content is released under the [MIT License](LICENSE). Third-party software remains subject to its respective license.
+
+## About ForgeUI
+
+ForgeUI is developed by RTechAI. [RTechAI on GitHub](https://github.com/RTechAI), [ForgeUI](https://forgeui.co.nz), and [ForgeUI Hosted Studio](https://studio.forgeui.co.nz) provide the organisation, product, and hosted development environment respectively. ForgeUI Studio is a visual embedded UI/HMI development environment for supported ESP32 hardware. ForgeUI Hardware Lab is the associated collection of physically tested hardware references, examples, and projects used to preserve reproducible physical evidence and evaluate hardware and examples for ForgeUI workflows.
+
+ForgeUI Hosted Studio is available for public registration.
